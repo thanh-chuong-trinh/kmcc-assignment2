@@ -5,7 +5,7 @@
   Author: Chu Le Gia Khanh (106394068), Group 6 (KMCC), COS10026
   Acknowledgements:
   - Shared header, footer and styles.css conventions by the team (see README.md).
-  - The form posts to the COS10026 test script named in the assignment brief.
+  - The form posts to process_eoi.php, which validates and saves it (browser validation is switched off with novalidate).
 -->
 <html lang="en">
   <head>
@@ -122,8 +122,9 @@
             tabindex="-1"
             aria-label="Job application"
             aria-describedby="required-note"
-            action="https://mercury.swin.edu.au/it000000/formtest.php"
+            action="process_eoi.php"
             method="post"
+            novalidate
           >
             <!-- 1. Position details -->
             <fieldset class="form-section" id="position-details" tabindex="-1">
