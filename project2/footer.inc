@@ -1,4 +1,4 @@
-  <!-- Footer: page links, project links (Jira, GitHub, live site), email and Acknowledgement of Country -->
+
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
