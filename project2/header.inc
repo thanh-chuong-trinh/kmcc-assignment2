@@ -1,6 +1,4 @@
 <?php
-// header.inc - skip link, logo and main menu, shared by every page.
-// Each page sets $current_page (e.g. 'index') before including this file.
 ?>
   <!-- Skip link: lets keyboard and screen reader users jump past the header -->
   <a class="skip-link" href="#main">Skip to main content</a>
