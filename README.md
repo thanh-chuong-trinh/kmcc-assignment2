@@ -10,6 +10,9 @@ This version adds PHP and MySQL to the Part 1 website. It is not a real store.
 3. Import `database.sql` in phpMyAdmin. It creates the `secondvolt` database.
 4. Open http://localhost/project2/index.php
 
+Or double-click `run.bat` in the repo folder: it starts MySQL, imports `database.sql`, starts PHP and opens http://localhost:8089/index.php.
+Close its window to stop the site. It looks for XAMPP in `C:\xampp` and `D:\xampp`.
+
 ## Folder structure
 
 ```
