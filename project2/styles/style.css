@@ -140,6 +140,10 @@ h2 { font-size: 1.25rem; margin-bottom: 1rem; }
   .header-tagline { justify-self: end; }
 }
 
+/* Jobs search box (uses the shared .search styles) */
+.job-search { align-items: center; margin-bottom: 1.25rem; max-width: 32rem; }
+.job-search label { font-weight: 600; }
+
 /* Footer */
 .site-footer { margin-top: 3rem; padding-block: 2rem; color: #fff; background: var(--accent); }
 .footer-grid { display: grid; gap: 1.5rem; }
