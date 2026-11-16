@@ -1,33 +1,4 @@
 <?php $current_page = 'jobs'; ?>
-<?php
-// Load the job listings from the database. A search term in ?q= filters by reference, title or summary.
-require 'settings.php';
-$search = isset($_GET['q']) ? trim($_GET['q']) : '';
-$jobs = [];
-$db_error = '';
-$conn = @mysqli_connect($host, $user, $pwd, $dbname);
-if (!$conn) {
-    $db_error = 'Sorry, the job list is not available right now.';
-} else {
-    $like = '%' . $search . '%';
-    $stmt = mysqli_prepare($conn, 'SELECT ref, title, summary, salary, reports_to, location, work_type, responsibilities, essential, preferable FROM jobs WHERE ref LIKE ? OR title LIKE ? OR summary LIKE ? ORDER BY ref');
-    mysqli_stmt_bind_param($stmt, 'sss', $like, $like, $like);
-    mysqli_stmt_execute($stmt);
-    $jobs = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
-    mysqli_close($conn);
-}
-
-// Print one list item per line of text, with HTML characters escaped.
-function print_items($text) {
-    foreach (explode("
-", $text) as $line) {
-        if (trim($line) !== '') {
-            echo '          <li>' . htmlspecialchars($line) . "</li>
-";
-        }
-    }
-}
-?>
 <!DOCTYPE html>
 <!--
   jobs.html - Position descriptions for Second Volt
@@ -82,43 +53,67 @@ function print_items($text) {
         <p>Questions? <a href="mailto:careers@secondvolt.com.au">careers@secondvolt.com.au</a></p>
       </aside>
 
-      <form class="search job-search" action="jobs.php" method="get" role="search">
-        <label for="q">Search positions</label>
-        <input id="q" name="q" type="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Title or reference">
-        <button type="submit">Search</button>
-      </form>
-
-<?php if ($db_error !== ''): ?>
-      <p><?php echo htmlspecialchars($db_error); ?></p>
-<?php elseif (count($jobs) === 0): ?>
-      <p>No positions match your search.</p>
-<?php endif; ?>
-<?php foreach ($jobs as $job): $id = 'job-' . strtolower($job['ref']); ?>
-      <section class="job" aria-labelledby="<?php echo htmlspecialchars($id); ?>">
-        <p class="job-ref"><span class="visually-hidden">Reference number: </span><?php echo htmlspecialchars($job['ref']); ?></p>
-        <h3 id="<?php echo htmlspecialchars($id); ?>"><?php echo htmlspecialchars($job['title']); ?></h3>
-        <p><?php echo htmlspecialchars($job['summary']); ?></p>
+      <section class="job" aria-labelledby="sv101">
+        <p class="job-ref"><span class="visually-hidden">Reference number: </span>SV101</p>
+        <h3 id="sv101">Front-end Developer</h3>
+        <p>Build fast, accessible product and trade-in pages for our online store.</p>
         <dl class="job-facts">
-          <dt>Salary</dt><dd><?php echo htmlspecialchars($job['salary']); ?></dd>
-          <dt>Reports to</dt><dd><?php echo htmlspecialchars($job['reports_to']); ?></dd>
-          <dt>Location</dt><dd><?php echo htmlspecialchars($job['location']); ?></dd>
-          <dt>Work type</dt><dd><?php echo htmlspecialchars($job['work_type']); ?></dd>
+          <dt>Salary</dt><dd>AUD $90,000 - $105,000 a year, plus super</dd>
+          <dt>Reports to</dt><dd>Head of Digital Retail</dd>
+          <dt>Location</dt><dd>Melbourne CBD, hybrid</dd>
+          <dt>Work type</dt><dd>Full-time, permanent</dd>
         </dl>
         <h4>Key responsibilities</h4>
         <ul>
-<?php print_items($job['responsibilities']); ?>
+          <li>Build product listing, product detail and checkout pages with semantic HTML and responsive CSS.</li>
+          <li>Keep every page accessible to WCAG 2.1 AA.</li>
+          <li>Improve page speed on phones, where most of our customers shop.</li>
+          <li>Review code with the team through GitHub pull requests.</li>
         </ul>
         <h4>Essential requirements</h4>
         <ul>
-<?php print_items($job['essential']); ?>
+          <li>3+ years building websites with HTML and CSS.</li>
+          <li>Comfortable using Git in a team.</li>
+          <li>Experience testing pages with a keyboard and a screen reader.</li>
         </ul>
         <h4>Preferable requirements</h4>
         <ul>
-<?php print_items($job['preferable']); ?>
+          <li>Experience on an e-commerce website.</li>
+          <li>Interest in reuse and reducing e-waste.</li>
         </ul>
-        <a class="button" href="apply.php">Apply for <?php echo htmlspecialchars($job['ref']); ?></a>
+        <a class="button" href="apply.php">Apply for SV101</a>
       </section>
-<?php endforeach; ?>
+
+      <section class="job" aria-labelledby="sv205">
+        <p class="job-ref"><span class="visually-hidden">Reference number: </span>SV205</p>
+        <h3 id="sv205">UX Designer</h3>
+        <p>Make shopping, checkout and trade-ins easy for every customer.</p>
+        <dl class="job-facts">
+          <dt>Salary</dt><dd>AUD $95,000 - $110,000 a year, plus super</dd>
+          <dt>Reports to</dt><dd>Director of Customer Experience</dd>
+          <dt>Location</dt><dd>Melbourne CBD, hybrid</dd>
+          <dt>Work type</dt><dd>Full-time, permanent</dd>
+        </dl>
+        <h4>Key responsibilities</h4>
+        <ul>
+          <li>Run user tests and accessibility checks with real customers.</li>
+          <li>Design wireframes and prototypes for new features, such as the trade-in quote.</li>
+          <li>Write clear product grading labels so buyers know a device's condition.</li>
+          <li>Share findings with developers and the product team.</li>
+        </ul>
+        <h4>Essential requirements</h4>
+        <ul>
+          <li>2+ years of UX design experience.</li>
+          <li>A portfolio that shows your design process.</li>
+          <li>Working knowledge of WCAG 2.1.</li>
+        </ul>
+        <h4>Preferable requirements</h4>
+        <ul>
+          <li>Experience designing for screen reader users.</li>
+          <li>Experience with an online store or marketplace.</li>
+        </ul>
+        <a class="button" href="apply.php">Apply for SV205</a>
+      </section>
     </section>
 
     <!-- Acknowledgement and inclusive employment statement (assignment requirement) -->
