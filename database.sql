@@ -11,3 +11,19 @@ USE secondvolt;
 -- users  (manager logins for manage.php, hashed passwords)    - TODO
 -- about  (member contributions shown on about.php)            - TODO
 -- ---------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS eoi (
+  EOInumber INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  job_reference VARCHAR(5) NOT NULL,
+  first_name VARCHAR(20) NOT NULL,
+  last_name VARCHAR(20) NOT NULL,
+  date_of_birth DATE NOT NULL,
+  gender VARCHAR(20) NOT NULL,
+  street_address VARCHAR(40) NOT NULL,
+  suburb VARCHAR(40) NOT NULL,
+  state VARCHAR(3) NOT NULL,
+  postcode CHAR(4) NOT NULL,
+  email VARCHAR(254) NOT NULL,
+  phone VARCHAR(12) NOT NULL,
+  skill_experience TINYINT(1) NOT NULL DEFAULT 0,
+  
