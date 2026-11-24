@@ -96,6 +96,15 @@ h2 { font-size: 1.25rem; margin-bottom: 1rem; }
 .job-facts dt { font-weight: 600; }
 .job-facts dd { margin: 0; }
 .job .button { margin-top: 1rem; }
+/* Jobs page search bar and result count (Cuong) */
+.job-search { margin-bottom: 1rem; scroll-margin-top: 1rem; }
+.job-search label { display: block; margin-bottom: 0.25rem; font-weight: 600; }
+.job-search-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.job-search input { flex: 1 1 14rem; min-width: 0; padding: 0.5rem 0.75rem; font: inherit; border: 1px solid #78716c; border-radius: var(--radius); }
+.job-search button { padding: 0.5rem 1.25rem; font: inherit; color: #fff; background: var(--accent); border: 0; border-radius: var(--radius); cursor: pointer; }
+.job-search button:hover { opacity: 0.9; }
+.job-search-clear { padding: 0.5rem 0.25rem; }
+.job-count { margin-bottom: 1.5rem; color: var(--muted); }
 .commitment { clear: both; }
 .commitment p { max-width: 65ch; }
 .commitment p + p { margin-top: 0.75rem; }
@@ -163,7 +172,7 @@ h2 { font-size: 1.25rem; margin-bottom: 1rem; }
 /* Desktop: the aside floats to the right of the jobs */
 @media (min-width: 64em) {
   .jobs-aside { float: right; width: 25%; margin-left: 2%; }
-  .job { width: 73%; }
+  .job, .job-search, .job-count { width: 73%; }
 }
 
 /* Apply page */
