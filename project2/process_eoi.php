@@ -1,4 +1,5 @@
 <?php
+// OpenAI Codex assisted with implementation, review and QA; see README.md.
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: apply.php");
     exit;
@@ -14,8 +15,8 @@ function getValue($name) {
         $errors[] = "Invalid text submitted for " . str_replace("_", " ", $name) . ".";
         return "";
     }
-    // Prepared statements handle SQL; preserve quotes and backslashes in text.
-    return trim($_POST[$name]);
+    // Canvas requires slash stripping; SQL safety still uses prepared statements.
+    return trim(stripslashes($_POST[$name]));
 }
 $job_reference = getValue("job_reference");
 $first_name = getValue("first_name");

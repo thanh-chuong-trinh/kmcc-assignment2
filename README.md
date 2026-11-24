@@ -32,7 +32,17 @@ tests/eoi.php         isolated CLI checks for application submissions
 
 See [the EOI test instructions and results](tests/README.md). The checks use a temporary database and do not change applications in `secondvolt`.
 
-## Rules for adding code
+## GenAI acknowledgement - Khanh's Part 2 work
+
+OpenAI Codex assisted with the EOI schema, Apply form integration,
+process_eoi.php implementation and debugging, automated QA scripts, and QA
+documentation. The work reuses the team's Part 1 form and shared includes.
+Course requirements were checked against COS10026 Canvas and the team's task
+allocation. Automated checks and their limits are recorded in tests/README.md.
+This acknowledgement covers Khanh's work only; it does not describe how other
+members created their code.
+
+## Team coding conventions
 
 - Every page starts with `<?php $current_page = 'pagename'; ?>` (for example `'jobs'`), then the HTML head,
   then `<?php include 'header.inc'; ?>` after `<body>` and `<?php include 'footer.inc'; ?>` before `</body>`.

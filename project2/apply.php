@@ -4,6 +4,7 @@
   apply.php - Job application form for Second Volt
   Author: Chu Le Gia Khanh (106394068), Group 6 (KMCC), COS10026
   Acknowledgements:
+  - OpenAI Codex assisted with the Part 2 form integration and QA (see README.md).
   - Shared header, footer and styles.css conventions by the team (see README.md).
   - process_eoi.php validates submissions and saves them to the project database.
 -->

@@ -20,11 +20,12 @@ function verify($condition, $label) {
         $failures[] = $label;
     }
 }
-function requestPage($path, $data = null) {
+function requestPage($path, $data = null, $cookie = '') {
     $options = ['method' => $data === null ? 'GET' : 'POST',
         'ignore_errors' => true, 'follow_location' => 0, 'timeout' => 5];
+    $options['header'] = $cookie === '' ? '' : "Cookie: $cookie\r\n";
     if ($data !== null) {
-        $options['header'] = "Content-Type: application/x-www-form-urlencoded\r\n";
+        $options['header'] .= "Content-Type: application/x-www-form-urlencoded\r\n";
         $options['content'] = http_build_query($data);
     }
     $body = file_get_contents('http://127.0.0.1:8099/' . $path, false,
@@ -60,7 +61,8 @@ try {
     if (!$probe) { throw new RuntimeException('Test port 8099 is already in use'); }
     fclose($probe);
     $server = proc_open([PHP_BINARY, '-d', 'extension_dir=' . ini_get('extension_dir'),
-        '-d', 'browscap=' . ini_get('browscap'), '-S', '127.0.0.1:8099', '-t', $site],
+        '-d', 'browscap=' . ini_get('browscap'), '-d', 'session.save_path=' . $site,
+        '-S', '127.0.0.1:8099', '-t', $site],
         [0 => ['pipe', 'r'], 1 => ['file', $site . '/server.log', 'a'],
          2 => ['file', $site . '/server.log', 'a']], $pipes, $site);
     if (!is_resource($server)) { throw new RuntimeException('Could not start test server'); }
@@ -131,9 +133,9 @@ try {
     [$status, $body] = requestPage('process_eoi.php', array_replace($valid,
         ['job_reference' => 'SV205', 'other_skills' => $text]));
     $stored = mysqli_fetch_row(mysqli_query($db, 'SELECT other_skills FROM eoi ORDER BY EOInumber DESC LIMIT 1'))[0];
-    verify($status === 200 && $stored === $text && rowCount($db) === 2
+    verify($status === 200 && $stored === "O'Reilly  SQL'); DROP TABLE eoi; -- <script>alert(1)</script>" && rowCount($db) === 2
         && strpos($body, '<script>alert(1)</script>') === false,
-        'SQL and script strings remain plain data; quotes and backslashes preserved');
+        'Canvas slash stripping applied; SQL and script strings remain plain data');
     foreach (['VIC' => ['3', '8'], 'NSW' => ['1', '2'], 'QLD' => ['4', '9'], 'NT' => ['0'],
         'WA' => ['6'], 'SA' => ['5'], 'TAS' => ['7'], 'ACT' => ['0']] as $state => $prefixes) {
         foreach ($prefixes as $prefix) {
@@ -142,11 +144,42 @@ try {
             verify($status === 200, "$state / {$prefix}000 and leap-year DOB accepted (course mapping)");
         }
     }
+    [$status, $body] = requestPage('jobs.php');
+    verify($status === 200 && substr_count($body, 'class="job"') === 2, 'Jobs: two database positions rendered');
+    [$status, $body] = requestPage('jobs.php?q=SV205');
+    verify($status === 200 && substr_count($body, 'class="job"') === 1
+        && strpos($body, 'Apply for SV205') !== false, 'Jobs: reference search filters results');
+    foreach (["' OR 1=1 --", '<script>alert(1)</script>', '%', '_'] as $query) {
+        [$status, $body] = requestPage('jobs.php?q=' . rawurlencode($query));
+        verify($status === 200 && substr_count($body, 'class="job"') === 0
+            && strpos($body, '<script>alert(1)</script>') === false,
+            'Jobs: injection, script or wildcard treated as text: ' . $query);
+    }
+    [$status, $body] = requestPage('jobs.php?q%5B%5D=test');
+    verify($status === 200 && strpos($body, 'Fatal error') === false, 'Jobs: array search handled safely');
+    $payload = '<script>alert(1)</script>';
+    $stmt = mysqli_prepare($db, "UPDATE jobs SET title=?, responsibilities=? WHERE job_ref='SV101'");
+    mysqli_stmt_bind_param($stmt, 'ss', $payload, $payload);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    [$status, $body] = requestPage('jobs.php');
+    verify($status === 200 && strpos($body, $payload) === false
+        && substr_count($body, '&lt;script&gt;alert(1)&lt;/script&gt;') >= 2,
+        'Jobs: stored script escaped in title and list items');
+    verify(mysqli_num_rows(mysqli_query($db, 'SELECT * FROM jobs')) === 2
+        && rowCount($db) === 13, 'Jobs security checks preserve both tables');
     file_put_contents($site . '/settings.php', str_replace($testDb, $testDb . '_missing', $settings));
+    [$status, $body] = requestPage('jobs.php');
+    verify($status === 503 && strpos($body, $testDb) === false
+        && strpos($body, 'Stack trace') === false, 'Jobs: database error is friendly');
     [$status, $body] = requestPage('process_eoi.php', $valid);
     verify($status === 500 && strpos($body, 'Unable to save your application') !== false
         && strpos($body, $testDb) === false && strpos($body, 'Stack trace') === false,
         'Database failure shows a friendly error without internals');
+    if (in_array('--manager-review', $argv, true)) {
+        file_put_contents($site . '/settings.php', $settings);
+        require __DIR__ . '/manager-branch.php';
+    }
 } finally {
     if (is_resource($server)) { proc_terminate($server); proc_close($server); }
     // This name is generated above, never taken from the application settings.
