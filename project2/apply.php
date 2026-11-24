@@ -122,8 +122,9 @@
             tabindex="-1"
             aria-label="Job application"
             aria-describedby="required-note"
-            action="https://mercury.swin.edu.au/it000000/formtest.php"
+            action="process_eoi.php"
             method="post"
+            novalidate
           >
             <!-- 1. Position details -->
             <fieldset class="form-section" id="position-details" tabindex="-1">

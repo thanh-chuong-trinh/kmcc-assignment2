@@ -26,4 +26,8 @@ CREATE TABLE IF NOT EXISTS eoi (
   email VARCHAR(254) NOT NULL,
   phone VARCHAR(12) NOT NULL,
   skill_experience TINYINT(1) NOT NULL DEFAULT 0,
-  
+  skill_tools_portfolio TINYINT(1) NOT NULL DEFAULT 0,
+  skill_accessibility TINYINT(1) NOT NULL DEFAULT 0,
+  other_skills TEXT,
+  status ENUM('New', 'Current', 'Final') NOT NULL DEFAULT 'New'
+);
