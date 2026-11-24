@@ -19,12 +19,18 @@ Close its window to stop the site. It looks for XAMPP in `C:\xampp` and `D:\xamp
 project2/
   index.php  jobs.php  apply.php  about.php
   header.inc  nav.inc  footer.inc  settings.php
-  process_eoi.php  search.php  manage.php   (to be added)
+  process_eoi.php
+  search.php  manage.php   (to be added)
   images/             page images
   styles/style.css    shared stylesheet
   styles/images/      images used by the CSS
 database.sql          one shared SQL file for all tables
+tests/eoi.php         isolated CLI checks for application submissions
 ```
+
+## Checking Apply and EOI
+
+See [the EOI test instructions and results](tests/README.md). The checks use a temporary database and do not change applications in `secondvolt`.
 
 ## Rules for adding code
 

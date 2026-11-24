@@ -3,12 +3,19 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: apply.php");
     exit;
 }
-function getValue($name) {
-    if (isset($_POST[$name]) && is_string($_POST[$name])) {
-        return trim(stripslashes($_POST[$name]));
-    }
+$errors = [];
 
-    return "";
+function getValue($name) {
+    global $errors;
+    if (!isset($_POST[$name])) {
+        return "";
+    }
+    if (!is_string($_POST[$name]) || !mb_check_encoding($_POST[$name], "UTF-8")) {
+        $errors[] = "Invalid text submitted for " . str_replace("_", " ", $name) . ".";
+        return "";
+    }
+    // Prepared statements handle SQL; preserve quotes and backslashes in text.
+    return trim($_POST[$name]);
 }
 $job_reference = getValue("job_reference");
 $first_name = getValue("first_name");
@@ -45,7 +52,6 @@ $skill_accessibility = in_array(
     $skills,
     true
 ) ? 1 : 0;
-$errors = [];
 
 $valid_job_references = ["SV101", "SV205"];
 
@@ -145,6 +151,11 @@ if (
     $skill_accessibility !== 1
 ) {
     $errors[] = "Please confirm all three skill requirements for your selected role.";
+}
+
+// MySQL TEXT holds at most 65,535 bytes, including multi-byte UTF-8 characters.
+if (strlen($other_skills) > 65535) {
+    $errors[] = "Other skills is too long. Please shorten your description.";
 }
 
 if (count($errors) > 0) {

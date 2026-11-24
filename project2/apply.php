@@ -1,11 +1,11 @@
 <?php $current_page = 'apply'; ?>
 <!doctype html>
 <!--
-  apply.html - Job application form for Second Volt
+  apply.php - Job application form for Second Volt
   Author: Chu Le Gia Khanh (106394068), Group 6 (KMCC), COS10026
   Acknowledgements:
   - Shared header, footer and styles.css conventions by the team (see README.md).
-  - The form posts to the COS10026 test script named in the assignment brief.
+  - process_eoi.php validates submissions and saves them to the project database.
 -->
 <html lang="en">
   <head>
@@ -215,12 +215,7 @@
                   <label for="date-of-birth"
                     >Date of birth <span>(required)</span></label
                   >
-                  <!-- HTML-only validation: valid calendar dates from 1900 to
-                       the fixed cutoff 01/11/2026, including leap years.
-                       The lookahead limits the year and cutoff; the remaining
-                       alternatives check month lengths and 29 February.
-                       HTML cannot update today's date automatically. Update
-                       pattern, title, help and error together if the cutoff changes. -->
+                  <!-- Calendar validity and the current date are checked by PHP. -->
                   <input
                     type="text"
                     id="date-of-birth"
@@ -229,18 +224,18 @@
                     placeholder="dd/mm/yyyy"
                     minlength="10"
                     maxlength="10"
-                    pattern="(?=(?:[0-9]{2}/[0-9]{2}/(?:19[0-9]{2}|20[01][0-9]|202[0-5])|[0-9]{2}/(?:0[1-9]|10)/2026|01/11/2026)$)(?:(?:0[1-9]|1[0-9]|2[0-8])/(?:0[1-9]|1[0-2])/[0-9]{4}|(?:29|30)/(?:0[13-9]|1[0-2])/[0-9]{4}|31/(?:0[13578]|1[02])/[0-9]{4}|29/02/(?:(?:19|20)(?:0[48]|[2468][048]|[13579][26])|2000))"
+                    pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}"
                     aria-describedby="date-of-birth-help date-of-birth-error"
-                    title="Enter a real date as dd/mm/yyyy, between 01/01/1900 and 01/11/2026."
+                    title="Enter a real date as dd/mm/yyyy, from 01/01/1900 to today."
                     required
                   />
                   <small id="date-of-birth-help"
                     >Use dd/mm/yyyy, for example 25/03/2004. Accepted range:
-                    01/01/1900 to 01/11/2026.</small
+                    01/01/1900 to today.</small
                   >
                   <span class="field-error" id="date-of-birth-error"
                     >Error: Enter a real calendar date in dd/mm/yyyy format,
-                    between 01/01/1900 and 01/11/2026. Check the day, month and
+                    from 01/01/1900 to today. Check the day, month and
                     leap year.</span
                   >
                 </p>
@@ -558,8 +553,8 @@
 
             <div class="form-bottom">
               <p class="form-test-note">
-                Submitting sends your sample data to the university test
-                service. This is not a real job application.
+                Submitting saves your sample application and gives you a
+                reference number. This is not a real job application.
               </p>
               <p class="form-actions">
                 <!-- Inline CSS example required by the assignment; most styling should remain external. -->

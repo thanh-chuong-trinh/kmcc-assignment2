@@ -6,7 +6,7 @@ CREATE DATABASE IF NOT EXISTS secondvolt CHARACTER SET utf8mb4 COLLATE utf8mb4_g
 USE secondvolt;
 
 -- ---------------------------------------------------------------
--- eoi    (Expression of Interest, filled by process_eoi.php)  - TODO
+-- eoi    (Expression of Interest, filled by process_eoi.php)
 -- jobs   (job listings shown on jobs.php)                     - TODO
 -- users  (manager logins for manage.php, hashed passwords)    - TODO
 -- about  (member contributions shown on about.php)            - TODO
