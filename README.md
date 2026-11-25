@@ -19,14 +19,30 @@ Close its window to stop the site. It looks for XAMPP in `C:\xampp` and `D:\xamp
 project2/
   index.php  jobs.php  apply.php  about.php
   header.inc  nav.inc  footer.inc  settings.php
-  process_eoi.php  search.php  manage.php   (to be added)
+  process_eoi.php
+  search.php  manage.php   (to be added)
   images/             page images
   styles/style.css    shared stylesheet
   styles/images/      images used by the CSS
 database.sql          one shared SQL file for all tables
+tests/eoi.php         isolated CLI checks for application submissions
 ```
 
-## Rules for adding code
+## Checking Apply and EOI
+
+See [the EOI test instructions and results](tests/README.md). The checks use a temporary database and do not change applications in `secondvolt`.
+
+## GenAI acknowledgement - Khanh's Part 2 work
+
+OpenAI Codex assisted with the EOI schema, Apply form integration,
+process_eoi.php implementation and debugging, automated QA scripts, and QA
+documentation. The work reuses the team's Part 1 form and shared includes.
+Course requirements were checked against COS10026 Canvas and the team's task
+allocation. Automated checks and their limits are recorded in tests/README.md.
+This acknowledgement covers Khanh's work only; it does not describe how other
+members created their code.
+
+## Team coding conventions
 
 - Every page starts with `<?php $current_page = 'pagename'; ?>` (for example `'jobs'`), then the HTML head,
   then `<?php include 'header.inc'; ?>` after `<body>` and `<?php include 'footer.inc'; ?>` before `</body>`.
