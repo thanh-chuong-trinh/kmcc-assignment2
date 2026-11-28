@@ -8,7 +8,7 @@ USE secondvolt;
 -- ---------------------------------------------------------------
 -- eoi    (Expression of Interest, filled by process_eoi.php)
 -- jobs   (job listings shown on jobs.php)                     - done (Cuong)
--- users  (manager logins for manage.php, hashed passwords)    - TODO
+-- users  (manager logins for manage.php, hashed passwords)    - done
 -- about  (member contributions shown on about.php)            - TODO
 -- ---------------------------------------------------------------
 
@@ -90,3 +90,19 @@ CREATE TABLE IF NOT EXISTS eoi (
   other_skills TEXT,
   status ENUM('New', 'Current', 'Final') NOT NULL DEFAULT 'New'
 );
+
+-- ---------------------------------------------------------------
+-- users: manager accounts for login.php / manage.php.
+-- Passwords are stored as bcrypt hashes made with PHP password_hash(),
+-- never as plain text. login.php checks them with password_verify().
+-- ---------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS users (
+  user_id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  username      VARCHAR(50)  NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL
+);
+
+-- Account for the marker: username admin, password admin.
+-- INSERT IGNORE skips it if the username already exists, so the file can be re-run safely.
+INSERT IGNORE INTO users (username, password_hash) VALUES
+('admin', '$2y$10$.jCJYQxRGJxNTKF267hC/ew/xbOmG8FSdi07X53ZB5QgfJzxxXW1G');
